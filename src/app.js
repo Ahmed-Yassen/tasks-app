@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
+const userRoute = require("../routes/userRoute");
 /********** Run Server ***********/
 const app = express();
 mongoose
@@ -15,7 +16,7 @@ mongoose
 app.use(express.json());
 
 /********** Routes ***********/
-
+app.use(userRoute);
 /********** Page not found ***********/
 app.use((req, res) => {
   res.status(404).json({ msg: "PAGE NOT FOUND!" });
