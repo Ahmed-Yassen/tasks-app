@@ -49,6 +49,19 @@ module.exports.updateUserTask = async (req, res, next) => {
   }
 };
 
+module.exports.removeTask = async (req, res, next) => {
+  try {
+    const task = await Task.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+    if (!task) throwCustomError("Task wasnt found!", 404);
+    res.send({ msg: "Task deleted successfully!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 //-Helper function
 const throwCustomError = (msg, status) => {
   let error = new Error(msg);
