@@ -65,3 +65,21 @@ module.exports.logoutAll = async (req, res, next) => {
 module.exports.getUserProfile = async (req, res, next) => {
   res.send(req.user);
 };
+
+module.exports.updateUserProfile = async (req, res, next) => {
+  try {
+    const updates = Object.keys(req.body);
+    const allowedFields = ["name", "email", "password", "age"];
+    const isValidUpdate = updates.every((update) =>
+      allowedFields.includes(update)
+    );
+    if (!isValidUpdate) throw new Error("Invalid Field(s)!");
+
+    updates.forEach((update) => (req.user[update] = req.body[update]));
+    req.user.save();
+    res.send({ msg: "User updated successfully!", user: req.user });
+  } catch (error) {
+    error.status = 400;
+    next(error);
+  }
+};
