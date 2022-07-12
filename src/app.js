@@ -22,7 +22,7 @@ app.use((req, res) => {
 });
 
 /********** Catch all errors ***********/
-app.use((error, req, res) => {
+app.use((error, req, res, next) => {
   res
     .status(error.status || 500)
     .json({ msg: `${error.status || 500} Internal Server Error! ${error}` });
