@@ -76,7 +76,7 @@ module.exports.updateUserProfile = async (req, res, next) => {
     if (!isValidUpdate) throw new Error("Invalid Field(s)!");
 
     updates.forEach((update) => (req.user[update] = req.body[update]));
-    req.user.save();
+    await req.user.save();
     res.send({ msg: "User updated successfully!", user: req.user });
   } catch (error) {
     error.status = 400;
