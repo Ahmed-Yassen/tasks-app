@@ -62,7 +62,7 @@ module.exports.logoutAll = async (req, res, next) => {
   }
 };
 
-module.exports.getUserProfile = async (req, res, next) => {
+module.exports.getUserProfile = async (req, res) => {
   res.send(req.user);
 };
 
@@ -80,6 +80,15 @@ module.exports.updateUserProfile = async (req, res, next) => {
     res.send({ msg: "User updated successfully!", user: req.user });
   } catch (error) {
     error.status = 400;
+    next(error);
+  }
+};
+
+module.exports.removeUserProfile = async (req, res, next) => {
+  try {
+    await req.user.remove();
+    res.send({ msg: "User removed successfully!" });
+  } catch (error) {
     next(error);
   }
 };
