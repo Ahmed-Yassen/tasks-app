@@ -19,7 +19,7 @@ module.exports.login = async (req, res, next) => {
 
     user.tokens.push({ token });
     await user.save();
-    res.send({ user, token });
+    res.send({ msg: "Logged In!", user, token });
   } catch (error) {
     error.status = 400;
     next(error);
@@ -34,7 +34,7 @@ module.exports.signup = async (req, res, next) => {
     });
     newUser.tokens.push({ token });
     await newUser.save();
-    res.status(201).send({ newUser, token });
+    res.status(201).send({ msg: "User Created!", newUser, token });
   } catch (error) {
     next(error);
   }
@@ -46,7 +46,17 @@ module.exports.logout = async (req, res, next) => {
       (token) => token.token !== req.token
     );
     await req.user.save();
-    res.send({ msg: "loggedOut", user: req.user });
+    res.send({ msg: "Logged out!", user: req.user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.logoutAll = async (req, res, next) => {
+  try {
+    req.user.tokens = [];
+    await req.user.save();
+    res.send({ msg: "Logged all out!", user: req.user });
   } catch (error) {
     next(error);
   }
