@@ -19,9 +19,23 @@ module.exports.login = async (req, res, next) => {
 
     user.tokens.push({ token });
     await user.save();
-    res.send(user);
+    res.send({ user, token });
   } catch (error) {
     error.status = 400;
+    next(error);
+  }
+};
+
+module.exports.signup = async (req, res, next) => {
+  try {
+    const newUser = await new User(req.body);
+    const token = jwt.sign({ _id: newUser._id }, "mylittlesecret", {
+      expiresIn: "1 day",
+    });
+    newUser.tokens.push({ token });
+    await newUser.save();
+    res.send({ newUser, token });
+  } catch (error) {
     next(error);
   }
 };
