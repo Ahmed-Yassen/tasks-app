@@ -61,3 +61,7 @@ module.exports.logoutAll = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.getUserProfile = async (req, res, next) => {
+  res.send(req.user);
+};
