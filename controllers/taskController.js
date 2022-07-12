@@ -12,3 +12,12 @@ module.exports.createTask = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.getUserTasks = async (req, res, next) => {
+  try {
+    await req.user.populate("tasks");
+    res.send(req.user.tasks);
+  } catch (error) {
+    next(error);
+  }
+};
