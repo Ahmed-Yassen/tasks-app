@@ -21,3 +21,37 @@ module.exports.getUserTasks = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.updateUserTask = async (req, res, next) => {
+  try {
+    const updates = Object.keys(req.body);
+    const allowedFields = ["description", "isCompleted"];
+
+    const isValidUpdate = updates.every((update) =>
+      allowedFields.includes(update)
+    );
+
+    if (!isValidUpdate) throwCustomError("Invalid Field(s)!", 400);
+
+    const task = await Task.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.user._id,
+      },
+      req.body
+    );
+    if (!task) throwCustomError("Task wasnt found", 404);
+
+    await task.save();
+    res.send({ msg: "Task updated successfully!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//-Helper function
+const throwCustomError = (msg, status) => {
+  let error = new Error(msg);
+  error.status = status;
+  throw error;
+};
