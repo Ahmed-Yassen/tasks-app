@@ -32,6 +32,11 @@ const userSchema = mongoose.Schema({
       }
     },
   },
+  age: {
+    type: Number,
+    default: 10,
+    min: [10, "Age must be atleast 10"],
+  },
   tokens: [
     {
       token: {
@@ -72,8 +77,8 @@ userSchema.methods.toJSON = function () {
   const user = this;
 
   const userObject = user.toObject();
-  delete password;
-  delete tokens;
+  delete userObject.password;
+  delete userObject.tokens;
   return userObject;
 };
 
