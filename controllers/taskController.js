@@ -15,7 +15,15 @@ module.exports.createTask = async (req, res, next) => {
 
 module.exports.getUserTasks = async (req, res, next) => {
   try {
-    await req.user.populate("tasks");
+    const match = {};
+
+    if (req.query.isCompleted)
+      match.isCompleted = req.query.isCompleted === "true" ? true : false;
+
+    await req.user.populate({
+      path: "tasks",
+      match,
+    });
     res.send(req.user.tasks);
   } catch (error) {
     next(error);
