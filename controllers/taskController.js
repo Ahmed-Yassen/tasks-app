@@ -31,6 +31,8 @@ module.exports.getUserTasks = async (req, res, next) => {
       match,
       options: {
         sort,
+        limit: parseInt(req.query.limit),
+        skip: parseInt(req.query.skip),
       },
     });
     res.send(req.user.tasks);
