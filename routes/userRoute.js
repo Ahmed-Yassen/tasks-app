@@ -90,6 +90,6 @@ router
 
 router
   .route("/users/profileImage")
-  .post(authMW, upload.single("image"), controller.uploadUserImg);
-
+  .post(authMW, upload.single("image"), controller.uploadUserImg)
+  .delete(authMW, controller.removeUserImg);
 module.exports = router;

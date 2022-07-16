@@ -111,3 +111,14 @@ exports.uploadUserImg = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.removeUserImg = async (req, res, next) => {
+  try {
+    if (!req.user.image) throw new Error("There is no image to be removed!");
+    req.user.image = undefined;
+    await req.user.save();
+    res.send({ msg: "Image removed successfully!" });
+  } catch (error) {
+    next(error);
+  }
+};
