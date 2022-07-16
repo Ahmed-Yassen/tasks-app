@@ -4,6 +4,18 @@ const controller = require("../controllers/userController");
 const authMW = require("../middlewares/authMW");
 const validationMW = require("../middlewares/validationMW");
 const { body } = require("express-validator");
+const multer = require("multer");
+
+const upload = multer({
+  limits: {
+    fileSize: 2_000_000,
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/.(png|jpg|jpeg)$/i))
+      cb(new Error("Please upload an image!"));
+    cb(undefined, true);
+  },
+});
 
 router.post(
   "/login",
@@ -75,5 +87,9 @@ router
     controller.updateUserProfile
   )
   .delete(authMW, controller.removeUserProfile);
+
+router
+  .route("/users/profileImage")
+  .post(authMW, upload.single("image"), controller.uploadUserImg);
 
 module.exports = router;

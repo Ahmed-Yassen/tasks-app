@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const sharp = require("sharp");
 
 module.exports.login = async (req, res, next) => {
   try {
@@ -88,6 +89,24 @@ module.exports.removeUserProfile = async (req, res, next) => {
   try {
     await req.user.remove();
     res.send({ msg: "User removed successfully!" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.uploadUserImg = async (req, res, next) => {
+  try {
+    const resizedImage = await sharp(req.file.buffer)
+      .resize({
+        width: 250,
+        height: 250,
+      })
+      .png()
+      .toBuffer();
+
+    req.user.image = resizedImage;
+    await req.user.save();
+    res.send({ msg: "Image uploaded successfully!" });
   } catch (error) {
     next(error);
   }
