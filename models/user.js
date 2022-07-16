@@ -45,6 +45,9 @@ const userSchema = mongoose.Schema({
       _id: false,
     },
   ],
+  image: {
+    type: Buffer,
+  },
 });
 
 userSchema.pre("save", async function (next) {
@@ -75,10 +78,12 @@ userSchema.virtual("tasks", {
 
 userSchema.methods.toJSON = function () {
   const user = this;
-
   const userObject = user.toObject();
+
   delete userObject.password;
   delete userObject.tokens;
+  delete userObject.image;
+
   return userObject;
 };
 
