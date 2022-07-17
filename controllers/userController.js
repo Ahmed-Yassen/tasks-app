@@ -90,6 +90,7 @@ module.exports.updateUserProfile = async (req, res, next) => {
 module.exports.removeUserProfile = async (req, res, next) => {
   try {
     await req.user.remove();
+    emailHandler.sendCancelationEmail(req.user.email, req.user.name);
     res.send({ msg: "User removed successfully!" });
   } catch (error) {
     next(error);
