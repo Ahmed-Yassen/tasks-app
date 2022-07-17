@@ -2,6 +2,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const sharp = require("sharp");
+const emailHandler = require("../emails/emailHandler");
 
 module.exports.login = async (req, res, next) => {
   try {
@@ -35,6 +36,7 @@ module.exports.signup = async (req, res, next) => {
     });
     newUser.tokens.push({ token });
     await newUser.save();
+    emailHandler.sendWelcomeEmail(newUser.email, newUser.name);
     res.status(201).send({ msg: "User Created!", newUser, token });
   } catch (error) {
     next(error);
