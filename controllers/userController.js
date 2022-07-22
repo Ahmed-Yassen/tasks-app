@@ -15,9 +15,13 @@ module.exports.login = async (req, res, next) => {
     );
     if (!isCorrectPassword) throw new Error("Invalid Email or Password!");
 
-    const token = jwt.sign({ _id: user._id.toString() }, "mylittlesecret", {
-      expiresIn: "1 day",
-    });
+    const token = jwt.sign(
+      { _id: user._id.toString() },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1 day",
+      }
+    );
 
     user.tokens.push({ token });
     await user.save();
@@ -31,7 +35,7 @@ module.exports.login = async (req, res, next) => {
 module.exports.signup = async (req, res, next) => {
   try {
     const newUser = await new User(req.body);
-    const token = jwt.sign({ _id: newUser._id }, "mylittlesecret", {
+    const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1 day",
     });
     newUser.tokens.push({ token });

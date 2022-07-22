@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
     if (!token) throw new Error("Unauthorized Operation!");
 
-    const decodedToken = jwt.verify(token, "mylittlesecret");
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findOne({
       _id: decodedToken._id,

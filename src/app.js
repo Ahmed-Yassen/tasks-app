@@ -7,10 +7,11 @@ const taskRoute = require("../routes/taskRoute");
 /********** Run Server ***********/
 const app = express();
 mongoose
-  .connect("mongodb://localhost:27017/Tasks-App")
+  .connect(process.env.MONGODB_URL)
   .then(() => {
-    app.listen(process.env.PORT || 8080, () => {
-      console.log("Server is up!");
+    const port = process.env.PORT;
+    app.listen(port, () => {
+      console.log(`Server is up on port ${port}!`);
     });
   })
   .catch((e) => console.log("DB Error! " + e));
