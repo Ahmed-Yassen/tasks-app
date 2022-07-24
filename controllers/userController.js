@@ -36,8 +36,9 @@ module.exports.signup = async (req, res, next) => {
   try {
     const usersEmails = await User.find({}, { _id: 0, email: 1 });
     const duplicateEmails = usersEmails.filter(
-      (user) => user.email === req.body
+      (user) => user.email === req.body.email
     );
+
     if (duplicateEmails.length) throw new Error("Email already registered!");
 
     const newUser = await new User(req.body);
