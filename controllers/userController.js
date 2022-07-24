@@ -34,6 +34,12 @@ module.exports.login = async (req, res, next) => {
 
 module.exports.signup = async (req, res, next) => {
   try {
+    const usersEmails = await User.find({}, { _id: 0, email: 1 });
+    const duplicateEmails = usersEmails.filter(
+      (user) => user.email === req.body
+    );
+    if (duplicateEmails.length) throw new Error("Email already registered!");
+
     const newUser = await new User(req.body);
     const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1 day",
@@ -43,6 +49,7 @@ module.exports.signup = async (req, res, next) => {
     emailHandler.sendWelcomeEmail(newUser.email, newUser.name);
     res.status(201).send({ msg: "User Created!", newUser, token });
   } catch (error) {
+    error.status = 400;
     next(error);
   }
 };
