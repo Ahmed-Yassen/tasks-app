@@ -9,7 +9,7 @@ const userOne = {
   name: "Mike",
   email: "mike@gmail.com",
   password: "myverystrongpw",
-  age: "22",
+  age: 22,
   tokens: [{ token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET) }],
 };
 
@@ -19,7 +19,7 @@ const userTwo = {
   name: "Jess",
   email: "jess@gmail.com",
   password: "myverystrongpw",
-  age: "22",
+  age: 22,
   tokens: [{ token: jwt.sign({ _id: userTwoId }, process.env.JWT_SECRET) }],
 };
 
