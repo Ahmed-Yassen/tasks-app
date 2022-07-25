@@ -27,7 +27,7 @@ const taskOneId = new mongoose.Types.ObjectId();
 const taskOne = {
   _id: taskOneId,
   description: "Task One",
-  owner: userOneId,
+  userId: userOneId,
 };
 
 const taskTwoId = new mongoose.Types.ObjectId();
@@ -35,14 +35,14 @@ const taskTwo = {
   _id: taskTwoId,
   description: "Task Two",
   isCompleted: true,
-  owner: userOneId,
+  userId: userOneId,
 };
 
 const taskThreeId = new mongoose.Types.ObjectId();
 const taskThree = {
   _id: taskThreeId,
   description: "Task Three",
-  owner: userTwoId,
+  userId: userTwoId,
 };
 
 const populateTestingDB = async () => {
