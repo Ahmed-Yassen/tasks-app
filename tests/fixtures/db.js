@@ -23,6 +23,17 @@ const userTwo = {
   tokens: [{ token: jwt.sign({ _id: userTwoId }, process.env.JWT_SECRET) }],
 };
 
+const userWithImgId = new mongoose.Types.ObjectId();
+const userWithImg = {
+  _id: userWithImgId,
+  name: "Larry",
+  email: "larry@gmail.com",
+  password: "myverystrongpw",
+  age: 22,
+  image: new mongoose.Types.Buffer("./test-img.jpg"),
+  tokens: [{ token: jwt.sign({ _id: userWithImgId }, process.env.JWT_SECRET) }],
+};
+
 const taskOneId = new mongoose.Types.ObjectId();
 const taskOne = {
   _id: taskOneId,
@@ -51,6 +62,7 @@ const populateTestingDB = async () => {
 
   await new User(userOne).save();
   await new User(userTwo).save();
+  await new User(userWithImg).save();
 
   await new Task(taskOne).save();
   await new Task(taskTwo).save();
@@ -61,6 +73,7 @@ module.exports = {
   populateTestingDB,
   userOne,
   userTwo,
+  userWithImg,
   taskOne,
   taskTwo,
   taskThree,
