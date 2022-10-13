@@ -12,7 +12,7 @@ beforeEach(populateTestingDB);
 
 test("Should create task for authroized user", async () => {
   const response = await request(app)
-    .post("/tasks")
+    .post("/api/tasks")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       description: "Write my unit-tests",
@@ -29,7 +29,7 @@ test("Should create task for authroized user", async () => {
 
 test("Shouldnt create task with incorrect datatype", async () => {
   await request(app)
-    .post("/tasks")
+    .post("/api/tasks")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       description: 1, //Should be string
@@ -40,7 +40,7 @@ test("Shouldnt create task with incorrect datatype", async () => {
 
 test("Shouldnt create task for unauthorized user", async () => {
   await request(app)
-    .post("/tasks")
+    .post("/api/tasks")
     .send({
       description: "something important",
     })
@@ -49,7 +49,7 @@ test("Shouldnt create task for unauthorized user", async () => {
 
 test("Should get authorized user tasks", async () => {
   const response = await request(app)
-    .get("/tasks")
+    .get("/api/tasks")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .expect(200);
 
@@ -57,12 +57,12 @@ test("Should get authorized user tasks", async () => {
 });
 
 test("Shouldnt get unauthorized user tasks", async () => {
-  await request(app).get("/tasks").expect(401);
+  await request(app).get("/api/tasks").expect(401);
 });
 
 test("Should update authorized user tasks", async () => {
   const response = await request(app)
-    .patch(`/tasks/${taskOne._id.toString()}`)
+    .patch(`/api/tasks/${taskOne._id.toString()}`)
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       description: "updated task content",
@@ -73,7 +73,7 @@ test("Should update authorized user tasks", async () => {
 
 test("Shouldnt update unauthorized user tasks", async () => {
   await request(app)
-    .patch(`/tasks/${taskOne._id.toString()}`)
+    .patch(`/api/tasks/${taskOne._id.toString()}`)
     .send({
       description: "This shouldnt work",
     })
@@ -82,7 +82,7 @@ test("Shouldnt update unauthorized user tasks", async () => {
 
 test("Shouldnt update invalid task fields", async () => {
   await request(app)
-    .patch(`/tasks/${taskOne._id.toString()}`)
+    .patch(`/api/tasks/${taskOne._id.toString()}`)
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       someOtherField: "Shouldnt work",
@@ -92,7 +92,7 @@ test("Shouldnt update invalid task fields", async () => {
 
 test("Shouldnt update another user's tasks", async () => {
   const response = await request(app)
-    .patch(`/tasks/${taskThree._id.toString()}`)
+    .patch(`/api/tasks/${taskThree._id.toString()}`)
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       description: "Shouldnt work cause this taskId belongs to userTwo",
@@ -106,7 +106,7 @@ test("Shouldnt update another user's tasks", async () => {
 
 test("Shouldnt update user's task with incorrect datatypes ", async () => {
   await request(app)
-    .patch(`/tasks/notValidMongoID`) //should send the valid mongoID of the task
+    .patch(`/api/tasks/notValidMongoID`) //should send the valid mongoID of the task
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       description: 123, //should be string
@@ -116,19 +116,19 @@ test("Shouldnt update user's task with incorrect datatypes ", async () => {
 
 test("Should delete authorized user task", async () => {
   const response = await request(app)
-    .delete(`/tasks/${taskOne._id.toString()}`)
+    .delete(`/api/tasks/${taskOne._id.toString()}`)
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .expect(200);
   expect(response.body.msg).toBe("Task deleted successfully!");
 });
 
 test("Shouldnt delete unauthorized user tasks", async () => {
-  await request(app).delete(`/tasks/${taskOne._id.toString()}`).expect(401);
+  await request(app).delete(`/api/tasks/${taskOne._id.toString()}`).expect(401);
 });
 
 test("Shouldnt delete another user's task", async () => {
   const response = await request(app)
-    .delete(`/tasks/${taskThree._id.toString()}`)
+    .delete(`/api/tasks/${taskThree._id.toString()}`)
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       description: "Shouldnt work cause this taskId belongs to userTwo",
@@ -142,7 +142,7 @@ test("Shouldnt delete another user's task", async () => {
 
 test("Shouldnt delete user's task with invalid task id", async () => {
   await request(app)
-    .patch(`/tasks/notValidMongoID`) //should send the valid mongoID of the task
+    .patch(`/api/tasks/notValidMongoID`) //should send the valid mongoID of the task
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .expect(400);
 });

@@ -8,7 +8,7 @@ beforeEach(populateTestingDB);
 /********** User CRUD Operations Tests ***********/
 test("Should login existing user", async () => {
   const response = await request(app)
-    .post("/login")
+    .post("/api/auth/login")
     .send({ email: userOne.email, password: userOne.password })
     .expect(200);
 
@@ -21,7 +21,7 @@ test("Should login existing user", async () => {
 
 test("Should not login non-existing user", async () => {
   let response = await request(app)
-    .post("/login")
+    .post("/api/auth/login")
     .send({ email: "fakemail@gmail.com", password: userOne.password })
     .expect(400);
 
@@ -30,7 +30,7 @@ test("Should not login non-existing user", async () => {
   );
 
   response = await request(app)
-    .post("/login")
+    .post("/api/auth/login")
     .send({ email: userOne.email, password: "notReallyMyPass" })
     .expect(400);
 
@@ -41,7 +41,7 @@ test("Should not login non-existing user", async () => {
 
 test("Should signup new user", async () => {
   const response = await request(app)
-    .post("/signup")
+    .post("/api/auth/signup")
     .send({
       email: "ahmedYassen@gmail.com",
       password: "someValidPass",
@@ -57,7 +57,10 @@ test("Should signup new user", async () => {
 });
 
 test("Shouldnt signup existing user", async () => {
-  const response = await request(app).post("/signup").send(userOne).expect(400);
+  const response = await request(app)
+    .post("/api/auth/signup")
+    .send(userOne)
+    .expect(400);
   expect(response.body.msg).toBe(
     "400 Internal Server Error! Error: Email already registered!"
   );
@@ -65,7 +68,7 @@ test("Shouldnt signup existing user", async () => {
 
 test("Should update authenticated-user profile with valid fields", async () => {
   const response = await request(app)
-    .patch("/users")
+    .patch("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       age: 26,
@@ -81,7 +84,7 @@ test("Should update authenticated-user profile with valid fields", async () => {
 
 test("Shouldnt update user with incorrect fields", async () => {
   const response = await request(app)
-    .patch("/users")
+    .patch("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({ location: "Alexandria" })
     .expect(400);
@@ -93,7 +96,7 @@ test("Shouldnt update user with incorrect fields", async () => {
 
 test("Should delete user profile", async () => {
   const response = await request(app)
-    .delete("/users")
+    .delete("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .expect(200);
 

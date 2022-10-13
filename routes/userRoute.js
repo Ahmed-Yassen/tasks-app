@@ -18,7 +18,7 @@ const upload = multer({
 });
 
 router.post(
-  "/login",
+  "/api/auth/login",
   [
     body("email").isEmail().withMessage("Email should be a valid email!"),
     body("password")
@@ -31,7 +31,7 @@ router.post(
   controller.login
 );
 router.post(
-  "/signup",
+  "/api/auth/signup",
   [
     body("email").isEmail().withMessage("Email should be a valid email!"),
     body("password")
@@ -53,11 +53,12 @@ router.post(
   validationMW,
   controller.signup
 );
-router.post("/logout", authMW, controller.logout);
-router.post("/logoutAll", authMW, controller.logoutAll);
+
+router.post("/api/auth/logout", authMW, controller.logout);
+router.post("/api/auth/logoutall", authMW, controller.logoutAll);
 
 router
-  .route("/users")
+  .route("/api/users/profile")
   .get(authMW, controller.getUserProfile)
   .patch(
     authMW,
@@ -89,7 +90,7 @@ router
   .delete(authMW, controller.removeUserProfile);
 
 router
-  .route("/users/profileImage")
+  .route("/api/users/profileImage")
   .post(authMW, upload.single("image"), controller.uploadUserImg)
   .delete(authMW, controller.removeUserImg);
 module.exports = router;

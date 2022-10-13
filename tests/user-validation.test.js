@@ -9,7 +9,7 @@ beforeEach(populateTestingDB);
 
 test("Login shouldnt accept invalid email or password format", async () => {
   await request(app)
-    .post("/login")
+    .post("/api/auth/login")
     .send({
       email: "ahmed", // Invalid Email
       password: "myverystrongpw",
@@ -17,7 +17,7 @@ test("Login shouldnt accept invalid email or password format", async () => {
     .expect(400);
 
   await request(app)
-    .post("/login")
+    .post("/api/auth/login")
     .send({
       email: "ahmed@gmail.com",
       password: "password", // Invalid Password: shouldnt contain the word 'password'
@@ -25,7 +25,7 @@ test("Login shouldnt accept invalid email or password format", async () => {
     .expect(400);
 
   await request(app)
-    .post("/login")
+    .post("/api/auth/login")
     .send({
       email: "ahmed@gmail.com",
       password: "s", // Invalid Password: should be atleast 8 characters
@@ -35,7 +35,7 @@ test("Login shouldnt accept invalid email or password format", async () => {
 
 test("Signup shouldnt accept invalid email, password, name or age format", async () => {
   await request(app)
-    .post("/signup")
+    .post("/api/auth/signup")
     .send({
       email: "ahmed.com", // Invalid Email
       name: "ahmed",
@@ -45,7 +45,7 @@ test("Signup shouldnt accept invalid email, password, name or age format", async
     .expect(400);
 
   await request(app)
-    .post("/signup")
+    .post("/api/auth/signup")
     .send({
       email: "ahmed@gmail.com",
       name: 1, // Invalid Name
@@ -55,7 +55,7 @@ test("Signup shouldnt accept invalid email, password, name or age format", async
     .expect(400);
 
   await request(app)
-    .post("/signup")
+    .post("/api/auth/signup")
     .send({
       email: "ahmed@gmail.com",
       name: "ahmed",
@@ -65,7 +65,7 @@ test("Signup shouldnt accept invalid email, password, name or age format", async
     .expect(400);
 
   await request(app)
-    .post("/signup")
+    .post("/api/auth/signup")
     .send({
       email: "ahmed@gmail.com",
       name: "ahmed",
@@ -75,7 +75,7 @@ test("Signup shouldnt accept invalid email, password, name or age format", async
     .expect(400);
 
   await request(app)
-    .post("/signup")
+    .post("/api/auth/signup")
     .send({
       email: "ahmed@gmail.com",
       name: "ahmed",
@@ -87,7 +87,7 @@ test("Signup shouldnt accept invalid email, password, name or age format", async
 
 test("Updates shouldnt accept invalid email, password, name or age format", async () => {
   await request(app)
-    .patch("/users")
+    .patch("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       email: "ahmed.com", // Invalid Email
@@ -98,7 +98,7 @@ test("Updates shouldnt accept invalid email, password, name or age format", asyn
     .expect(400);
 
   await request(app)
-    .patch("/users")
+    .patch("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       email: "ahmed@gmail.com",
@@ -109,7 +109,7 @@ test("Updates shouldnt accept invalid email, password, name or age format", asyn
     .expect(400);
 
   await request(app)
-    .patch("/users")
+    .patch("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       email: "ahmed@gmail.com",
@@ -120,7 +120,7 @@ test("Updates shouldnt accept invalid email, password, name or age format", asyn
     .expect(400);
 
   await request(app)
-    .patch("/users")
+    .patch("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       email: "ahmed@gmail.com",
@@ -131,7 +131,7 @@ test("Updates shouldnt accept invalid email, password, name or age format", asyn
     .expect(400);
 
   await request(app)
-    .patch("/users")
+    .patch("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .send({
       email: "ahmed@gmail.com",

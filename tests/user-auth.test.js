@@ -9,18 +9,18 @@ beforeEach(populateTestingDB);
 
 test("Should logout authorized user", async () => {
   await request(app)
-    .post("/logout")
+    .post("/api/auth/logout")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .expect(200);
 });
 
 test("Shouldnt logout unauthorized user", async () => {
-  await request(app).post("/logout").expect(401);
+  await request(app).post("/api/auth/logout").expect(401);
 });
 
 test("Should logoutall devices of authorized user", async () => {
   const response = await request(app)
-    .post("/logoutAll")
+    .post("/api/auth/logoutall")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .expect(200);
 
@@ -28,12 +28,12 @@ test("Should logoutall devices of authorized user", async () => {
 });
 
 test("Shouldnt logoutall devices of unauthorized user", async () => {
-  await request(app).post("/logoutAll").expect(401);
+  await request(app).post("/api/auth/logoutall").expect(401);
 });
 
 test("Should get profile of authorized user", async () => {
   const response = await request(app)
-    .get("/users")
+    .get("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .expect(200);
 
@@ -46,36 +46,36 @@ test("Should get profile of authorized user", async () => {
 });
 
 test("Shoudnt get profile of unauthorized user", async () => {
-  await request(app).get("/users").expect(401);
+  await request(app).get("/api/users/profile").expect(401);
 });
 
 test("Should remove authorized user profile", async () => {
   const response = await request(app)
-    .delete("/users")
+    .delete("/api/users/profile")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .expect(200);
   expect(response.body).toEqual({ msg: "User removed successfully!" });
 });
 
 test("Shouldnt remove unauthorized user profile", async () => {
-  await request(app).delete("/users").expect(401);
+  await request(app).delete("/api/users/profile").expect(401);
 });
 
 test("Should upload authorized user image", async () => {
   await request(app)
-    .post("/users/profileImage")
+    .post("/api/users/profileImage")
     .set("Authorization", `Bearer ${userOne.tokens[0].token}`)
     .attach("image", "./tests/fixtures/test-img.jpg")
     .expect(200);
 });
 
 test("Shouldnt upload unauthorized user image", async () => {
-  await request(app).post("/users/profileImage").expect(401);
+  await request(app).post("/api/users/profileImage").expect(401);
 });
 
 test("Should delete authorized user image", async () => {
   const response = await request(app)
-    .delete("/users/profileImage")
+    .delete("/api/users/profileImage")
     .set("Authorization", `Bearer ${userWithImg.tokens[0].token}`)
     .expect(200);
 
@@ -83,5 +83,5 @@ test("Should delete authorized user image", async () => {
 });
 
 test("Shouldnt delete unauthorized user image", async () => {
-  await request(app).delete("/users/profileImage").expect(401);
+  await request(app).delete("/api/users/profileImage").expect(401);
 });

@@ -6,7 +6,7 @@ const authMW = require("../middlewares/authMW");
 const validationMW = require("../middlewares/validationMW");
 
 router
-  .route("/tasks")
+  .route("/api/tasks")
   .post(
     authMW,
     [
@@ -24,7 +24,7 @@ router
   .get(authMW, controller.getUserTasks);
 
 router
-  .route("/tasks/:id")
+  .route("/api/tasks/:id")
   .patch(
     authMW,
     [
