@@ -2,6 +2,7 @@
 # Tasks App
 
 A Node RESTful API that enables users to add tasks to their todo list.
+
 Technologies Used: Node.js - Express.js - JavaScript - MongoDB - Mongoose - Jest
 
 
